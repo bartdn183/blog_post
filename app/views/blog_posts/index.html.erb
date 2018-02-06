@@ -1,4 +1,4 @@
-<h1>Current Blog Posts</h1>
+<h1>Welcome <%= current_user.username %></h1>
 
 <% @blog_posts.each do |blog_post| %>
 	<div class="panel panel-default">
@@ -6,21 +6,24 @@
 			<%= link_to blog_post.title, blog_post_path(blog_post) %>
 		</div>
 		<div class="panel-body">
-			by <%= blog_post.author %><br>
+			by <%= link_to blog_post.user.username, user_posts_path(name: blog_post.user.username) %><br>
 			<p><%= blog_post.created_at.strftime('%m/%d/%Y at %I:%M %p') %></p>
 			<p>
 				<% if blog_post.blog_entry.length >= 150 %>
-					<%= truncate blog_post.blog_entry, length: 150 %>...<%= link_to 'Read More', blog_post_path(blog_post) %></p>
+					<%= blog_post.blog_entry[0..150].html_safe %>...<%= link_to 'Read More', blog_post_path(blog_post) %></p>
 				<% else %>
 					<%= blog_post.blog_entry %>
 				<% end %>
 		</div>
 		<div class="panel-footer">
-			<%= link_to "Edit", edit_blog_post_path(blog_post), class: "btn btn-warning" %>
-			<%= link_to "Destroy", blog_post_path(blog_post), method: :delete, data: { confirm: "Are you sure?"}, class: "btn btn-danger" %>
+			<% if current_user.id == blog_post.user_id %>
+				<%= link_to "Edit", edit_blog_post_path(blog_post), class: "btn btn-warning" %>
+				<%= link_to "Destroy", blog_post_path(blog_post), method: :delete, data: { confirm: "Are you sure?"}, class: "btn btn-danger" %>
+			<% end %>
+
 		</div>
 	</div>
 <% end %>
 
-<%= link_to "New Blog Post", new_blog_post_path, class: "btn btn-success" %>
+<%= paginate @blog_posts %>
 

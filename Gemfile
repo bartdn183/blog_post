@@ -5,6 +5,9 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'gravatarify'
+gem 'kaminari'
+gem 'awesome_print', require: "ap"
 gem 'devise'
 gem 'bootstrap-sass'
 gem 'jquery-rails'
